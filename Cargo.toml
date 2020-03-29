@@ -21,5 +21,10 @@ version = "1.0.17"
 name = "fn_error_context"
 proc-macro = true
 
+[[test]]
+name = "tests"
+path = "tests/tests.rs"
+
 [dev-dependencies]
 anyhow = "1.0.27"
+trybuild = "1.0.24"
