@@ -11,7 +11,7 @@
 An attribute macro to add context to errors from a function.
 
 ```
-#[error_context("failed to parse config at `{}`", path.display())]
+#[context("failed to parse config at `{}`", path.display())]
 pub fn parse_config(path: &Path) -> anyhow::Result<u32> {
     let text = read_to_string(path)?;
     Ok(text.parse()?)

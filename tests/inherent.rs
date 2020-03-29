@@ -1,9 +1,9 @@
-use fn_error_context::error_context;
+use fn_error_context::context;
 
 struct Foo(u32);
 
 impl Foo {
-    #[error_context("context")]
+    #[context("context")]
     fn do_stuff(&self) -> anyhow::Result<()> {
         anyhow::bail!("error {}", self.0)
     }

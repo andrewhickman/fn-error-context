@@ -1,6 +1,6 @@
-use fn_error_context::error_context;
+use fn_error_context::context;
 
-#[error_context("context")]
+#[context("context")]
 fn do_stuff() -> anyhow::Result<()> {
     anyhow::bail!("error")
 }
