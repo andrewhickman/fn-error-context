@@ -1,0 +1,7 @@
+error: argument never used
+ --> $DIR/fmt_unused_arg.rs:3:28
+  |
+3 | #[error_context("context", 1)]
+  |                 ---------  ^ argument never used
+  |                 |
+  |                 formatting specifier missing
