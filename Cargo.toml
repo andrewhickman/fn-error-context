@@ -10,14 +10,6 @@ readme = "README.md"
 edition = "2018"
 autotests = false
 
-[dependencies]
-quote = "1.0.3"
-proc-macro2 = "1.0.9"
-
-[dependencies.syn]
-features = ["full", "parsing"]
-version = "1.0.17"
-
 [lib]
 name = "fn_error_context"
 proc-macro = true
@@ -26,7 +18,17 @@ proc-macro = true
 name = "tests"
 path = "tests/tests.rs"
 
+[[test]]
+name = "version-numbers"
+path = "tests/version_numbers.rs"
+
+[dependencies]
+quote = "1.0.3"
+proc-macro2 = "1.0.9"
+syn = { version = "1.0.17", features = ["full"] }
+
 [dev-dependencies]
 anyhow = "1.0.27"
 trybuild = "1.0.24"
 failure = "0.1.7"
+version-sync = "0.8.1"

@@ -25,6 +25,7 @@
 //! [`anyhow`]: https://crates.io/crates/anyhow
 //! [`failure`]: https://crates.io/crates/failure
 
+#![doc(html_root_url = "https://docs.rs/fn-error-context/0.0.0")]
 #![deny(missing_docs)]
 
 extern crate proc_macro;
@@ -40,7 +41,7 @@ use quote::quote;
 ///
 /// This macro desugars to something like
 /// ```
-/// # fn function_body() {}
+/// # fn function_body() -> anyhow::Result<()> { unimplemented!() }
 /// #
 /// pub fn function() -> anyhow::Result<()> {
 ///     (|| -> anyhow::Result<()> {
