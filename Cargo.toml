@@ -8,13 +8,13 @@ documentation = "https://docs.rs/fn-error-context"
 license = "MIT/Apache-2.0"
 readme = "README.md"
 edition = "2018"
+autotests = false
 
 [dependencies]
 quote = "1.0.3"
-proc-macro2 = "1.0.9"
 
 [dependencies.syn]
-features = ["full", "clone-impls"]
+features = ["full", "parsing"]
 version = "1.0.17"
 
 [lib]

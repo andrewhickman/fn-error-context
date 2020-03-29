@@ -5,4 +5,6 @@ fn do_stuff() -> anyhow::Result<()> {
     anyhow::bail!("error")
 }
 
-fn main() {}
+fn main() {
+    assert_eq!(format!("{:#}", do_stuff().unwrap_err()), "context: error");
+}
