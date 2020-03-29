@@ -9,4 +9,6 @@ fn tests() {
     tests.compile_fail("tests/missing_fmt.rs");
     tests.pass("tests/fmt_args.rs");
     tests.pass("tests/failure.rs");
+    tests.pass("tests/non_copy_arg.rs");
+    tests.pass("tests/non_copy_fmt_arg.rs");
 }
