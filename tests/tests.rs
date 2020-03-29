@@ -11,4 +11,5 @@ fn tests() {
     tests.pass("tests/failure.rs");
     tests.pass("tests/non_copy_arg.rs");
     tests.pass("tests/non_copy_fmt_arg.rs");
+    tests.pass("tests/as_ref.rs");
 }
