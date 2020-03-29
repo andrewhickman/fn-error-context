@@ -14,7 +14,7 @@ pub fn error_context(args: TokenStream, input: TokenStream) -> TokenStream {
     let body = &input.block;
     let return_ty = &input.sig.output;
     input.block = syn::parse_quote!({
-        (move || #return_ty #body)().map_err(|err| err.context(format!(#fmt, #args)))
+        (move || #return_ty #body)().map_err(|err| err.context(format!(#fmt, #args)).into())
     });
 
     quote!(#input).into()

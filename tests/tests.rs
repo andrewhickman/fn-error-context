@@ -8,4 +8,5 @@ fn tests() {
     tests.pass("tests/inherent.rs");
     tests.compile_fail("tests/missing_fmt.rs");
     tests.pass("tests/fmt_args.rs");
+    tests.pass("tests/failure.rs");
 }

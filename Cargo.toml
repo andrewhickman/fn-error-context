@@ -28,3 +28,4 @@ path = "tests/tests.rs"
 [dev-dependencies]
 anyhow = "1.0.27"
 trybuild = "1.0.24"
+failure = "0.1.7"
