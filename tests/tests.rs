@@ -14,4 +14,5 @@ fn tests() {
     tests.pass("tests/as_ref.rs");
     tests.compile_fail("tests/fmt_missing_arg.rs");
     tests.compile_fail("tests/fmt_unused_arg.rs");
+    tests.pass("tests/fmt_named_arg.rs");
 }

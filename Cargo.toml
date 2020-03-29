@@ -12,6 +12,7 @@ autotests = false
 
 [dependencies]
 quote = "1.0.3"
+proc-macro2 = "1.0.9"
 
 [dependencies.syn]
 features = ["full", "parsing"]
