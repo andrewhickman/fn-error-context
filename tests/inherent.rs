@@ -7,6 +7,11 @@ impl Foo {
     fn do_stuff(&self) -> anyhow::Result<()> {
         anyhow::bail!("error {}", self.0)
     }
+
+    #[context("context")]
+    async fn do_async_stuff(&self) -> anyhow::Result<()> {
+        anyhow::bail!("error {}", self.0)
+    }
 }
 
 fn main() {
