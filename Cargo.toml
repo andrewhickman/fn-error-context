@@ -31,4 +31,4 @@ syn = { version = "1.0.17", features = ["full"] }
 anyhow = "1.0.27"
 trybuild = "1.0.24"
 failure = "0.1.7"
-version-sync = "0.8.1"
+version-sync = "0.9.1"
