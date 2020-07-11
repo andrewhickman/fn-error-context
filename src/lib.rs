@@ -59,8 +59,9 @@ pub fn context(args: TokenStream, input: TokenStream) -> TokenStream {
     if input.sig.asyncness.is_some() {
         match return_ty {
             syn::ReturnType::Default => {
-                return syn::Error::new_spanned(return_ty,
-                    "function should return Result").to_compile_error().into()
+                return syn::Error::new_spanned(return_ty, "function should return Result")
+                    .to_compile_error()
+                    .into()
             }
             syn::ReturnType::Type(_, return_ty) => {
                 input.block = syn::parse_quote!({
