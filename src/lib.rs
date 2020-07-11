@@ -7,6 +7,7 @@
 //! ```
 //! # use std::fs::read_to_string;
 //! # use std::path::Path;
+//! # use std::io;
 //! #
 //! use fn_error_context::context;
 //!
@@ -16,9 +17,14 @@
 //!     Ok(text.parse()?)
 //! }
 //!
+//! let error = parse_config("not-found").unwrap_err();
 //! assert_eq!(
-//!     parse_config("not-found").unwrap_err().to_string(),
-//!     "failed to parse config at `not-found`"
+//!     error.to_string(),
+//!     "failed to parse config at `not-found`",
+//! );
+//! assert_eq!(
+//!     error.source().unwrap().downcast_ref::<io::Error>().unwrap().kind(),
+//!     io::ErrorKind::NotFound,
 //! );
 //! ```
 //!
