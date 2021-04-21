@@ -1,7 +1,7 @@
 [package]
 name = "fn-error-context"
 description = "An attribute macro to add context to errors from a function."
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Andrew Hickman <andrew.hickman1@sky.com>"]
 repository = "https://github.com/andrewhickman/fn-error-context"
 documentation = "https://docs.rs/fn-error-context"
