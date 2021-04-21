@@ -70,16 +70,16 @@ pub fn context(args: TokenStream, input: TokenStream) -> TokenStream {
                     .into()
             }
             syn::ReturnType::Type(_, return_ty) => {
-                input.block = syn::parse_quote!({
+                input.block.stmts = syn::parse_quote!(
                     let result: #return_ty = async { #body }.await;
                     result.map_err(|err| err.context(format!(#args)).into())
-                });
+                );
             }
         }
     } else {
-        input.block = syn::parse_quote!({
+        input.block.stmts = syn::parse_quote!(
             (|| #return_ty #body)().map_err(|err| err.context(format!(#args)).into())
-        });
+        );
     }
 
     quote!(#input).into()
