@@ -71,7 +71,7 @@ pub fn context(args: TokenStream, input: TokenStream) -> TokenStream {
             }
             syn::ReturnType::Type(_, return_ty) => {
                 input.block.stmts = syn::parse_quote!(
-                    let result: #return_ty = async { #body }.await;
+                    let result: #return_ty = async move { #body }.await;
                     result.map_err(|err| err.context(format!(#args)).into())
                 );
             }
