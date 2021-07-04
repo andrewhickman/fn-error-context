@@ -17,7 +17,6 @@ fn tests() {
     tests.pass("tests/fmt_named_arg.rs");
     tests.compile_fail("tests/async_without_return.rs");
     tests.compile_fail("tests/preserve_lint.rs");
-    tests.pass("tests/borrowing.rs");
     tests.pass("tests/async_borrowing.rs");
     tests.pass("tests/no_move.rs");
     tests.pass("tests/async_no_move.rs");
