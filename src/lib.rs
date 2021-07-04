@@ -37,7 +37,10 @@
 extern crate proc_macro;
 
 use proc_macro::TokenStream;
-use quote::quote;
+use proc_macro2::TokenStream as TokenStream2;
+use quote::{quote, ToTokens};
+use syn::parse::{self, Parse, ParseStream};
+use syn::Token;
 
 /// Add context to errors from a function.
 ///
@@ -55,32 +58,56 @@ use quote::quote;
 ///     })().map_err(|err| err.context("context"))
 /// }
 /// ```
+///
+/// Sometimes you will receive borrowck errors, especially when returning references. These can
+/// often be fixed by setting the `move` option of the attribute macro. For example:
+///
+/// ```
+/// #[context(move, "context")]
+/// fn returns_reference(val: &mut u32) -> anyhow::Result<&mut u32> {
+///     Ok(&mut *val)
+/// }
+/// ```
 #[proc_macro_attribute]
 pub fn context(args: TokenStream, input: TokenStream) -> TokenStream {
-    let args: proc_macro2::TokenStream = args.into();
+    let Args(move_token, format_args) = syn::parse_macro_input!(args);
     let mut input = syn::parse_macro_input!(input as syn::ItemFn);
 
     let body = &input.block;
     let return_ty = &input.sig.output;
-    if input.sig.asyncness.is_some() {
-        match return_ty {
+    let new_body = if input.sig.asyncness.is_some() {
+        let return_ty = match return_ty {
             syn::ReturnType::Default => {
-                return syn::Error::new_spanned(return_ty, "function should return Result")
+                return syn::Error::new_spanned(input, "function should return Result")
                     .to_compile_error()
-                    .into()
+                    .into();
             }
-            syn::ReturnType::Type(_, return_ty) => {
-                input.block.stmts = syn::parse_quote!(
-                    let result: #return_ty = async move { #body }.await;
-                    result.map_err(|err| err.context(format!(#args)).into())
-                );
-            }
+            syn::ReturnType::Type(_, return_ty) => return_ty,
+        };
+        quote! {
+            let result: #return_ty = async #move_token { #body }.await;
+            result.map_err(|err| err.context(format!(#format_args)).into())
         }
     } else {
-        input.block.stmts = syn::parse_quote!(
-            (|| #return_ty #body)().map_err(|err| err.context(format!(#args)).into())
-        );
-    }
+        quote! {
+            (#move_token || #return_ty #body)().map_err(|err| err.context(format!(#format_args)).into())
+        }
+    };
+    input.block.stmts = vec![syn::Stmt::Expr(syn::Expr::Verbatim(new_body))];
 
-    quote!(#input).into()
+    input.into_token_stream().into()
+}
+
+struct Args(Option<Token![move]>, TokenStream2);
+impl Parse for Args {
+    fn parse(input: ParseStream<'_>) -> parse::Result<Self> {
+        let move_token = if input.peek(Token![move]) {
+            let token = input.parse()?;
+            input.parse::<Token![,]>()?;
+            Some(token)
+        } else {
+            None
+        };
+        Ok(Self(move_token, input.parse()?))
+    }
 }
