@@ -63,6 +63,8 @@ use syn::Token;
 /// often be fixed by setting the `move` option of the attribute macro. For example:
 ///
 /// ```
+/// use fn_error_context::context;
+///
 /// #[context(move, "context")]
 /// fn returns_reference(val: &mut u32) -> anyhow::Result<&mut u32> {
 ///     Ok(&mut *val)
@@ -90,7 +92,13 @@ pub fn context(args: TokenStream, input: TokenStream) -> TokenStream {
         }
     } else {
         quote! {
-            (#move_token || #return_ty #body)().map_err(|err| err.context(format!(#format_args)).into())
+            // Moving a non-`Copy` value into the closure tells borrowck to always treat the closure
+            // as a `FnOnce`, preventing some borrowing errors.
+            let force_fn_once = ::core::iter::empty::<()>();
+            (#move_token || #return_ty {
+                ::core::mem::drop(force_fn_once);
+                #body
+            })().map_err(|err| err.context(format!(#format_args)).into())
         }
     };
     input.block.stmts = vec![syn::Stmt::Expr(syn::Expr::Verbatim(new_body))];
