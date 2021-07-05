@@ -37,7 +37,7 @@
 extern crate proc_macro;
 
 use proc_macro::TokenStream;
-use proc_macro2::TokenStream as TokenStream2;
+use proc_macro2::{Ident, Span, TokenStream as TokenStream2};
 use quote::{quote, ToTokens};
 use syn::parse::{self, Parse, ParseStream};
 use syn::Token;
@@ -77,6 +77,7 @@ pub fn context(args: TokenStream, input: TokenStream) -> TokenStream {
 
     let body = &input.block;
     let return_ty = &input.sig.output;
+    let err = Ident::new("err", Span::mixed_site());
     let new_body = if input.sig.asyncness.is_some() {
         let return_ty = match return_ty {
             syn::ReturnType::Default => {
@@ -86,19 +87,21 @@ pub fn context(args: TokenStream, input: TokenStream) -> TokenStream {
             }
             syn::ReturnType::Type(_, return_ty) => return_ty,
         };
+        let result = Ident::new("result", Span::mixed_site());
         quote! {
-            let result: #return_ty = async #move_token { #body }.await;
-            result.map_err(|err| err.context(format!(#format_args)).into())
+            let #result: #return_ty = async #move_token { #body }.await;
+            #result.map_err(|#err| #err.context(format!(#format_args)).into())
         }
     } else {
+        let force_fn_once = Ident::new("force_fn_once", Span::mixed_site());
         quote! {
             // Moving a non-`Copy` value into the closure tells borrowck to always treat the closure
             // as a `FnOnce`, preventing some borrowing errors.
-            let force_fn_once = ::core::iter::empty::<()>();
+            let #force_fn_once = ::core::iter::empty::<()>();
             (#move_token || #return_ty {
-                ::core::mem::drop(force_fn_once);
+                ::core::mem::drop(#force_fn_once);
                 #body
-            })().map_err(|err| err.context(format!(#format_args)).into())
+            })().map_err(|#err| #err.context(format!(#format_args)).into())
         }
     };
     input.block.stmts = vec![syn::Stmt::Expr(syn::Expr::Verbatim(new_body))];
