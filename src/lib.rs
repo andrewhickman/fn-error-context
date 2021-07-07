@@ -31,7 +31,7 @@
 //! [`anyhow`]: https://crates.io/crates/anyhow
 //! [`failure`]: https://crates.io/crates/failure
 
-#![doc(html_root_url = "https://docs.rs/fn-error-context/0.1.2")]
+#![doc(html_root_url = "https://docs.rs/fn-error-context/0.2.0")]
 #![deny(missing_docs)]
 
 extern crate proc_macro;
