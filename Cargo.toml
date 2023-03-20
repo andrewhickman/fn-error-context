@@ -25,7 +25,7 @@ path = "tests/version_numbers.rs"
 [dependencies]
 quote = "1.0.3"
 proc-macro2 = "1.0.9"
-syn = { version = "1.0.17", features = ["full"] }
+syn = { version = "2.0.4", features = ["full"] }
 
 [dev-dependencies]
 anyhow = "1.0.27"
