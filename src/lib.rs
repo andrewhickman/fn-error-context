@@ -104,7 +104,7 @@ pub fn context(args: TokenStream, input: TokenStream) -> TokenStream {
             })().map_err(|#err| #err.context(format!(#format_args)).into())
         }
     };
-    input.block.stmts = vec![syn::Stmt::Expr(syn::Expr::Verbatim(new_body))];
+    input.block.stmts = vec![syn::Stmt::Expr(syn::Expr::Verbatim(new_body), None)];
 
     input.into_token_stream().into()
 }
