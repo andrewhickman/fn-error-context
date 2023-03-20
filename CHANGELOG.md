@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.2.1
+
+* Update syn to 2.0.4
+
 ## 0.2.0
 
 * Fix some borrow checker errors with synchronous functions, and add the `#[context(move, "context")]` syntax to support functions which consume their arguments. Thanks to [@KaiJewson](https://github.com/KaiJewson) for [#5](https://github.com/andrewhickman/fn-error-context/pull/5).
